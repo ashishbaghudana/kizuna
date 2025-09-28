@@ -30,6 +30,10 @@ class Contact(db.Model):
     events = db.relationship('Event', back_populates='contact', cascade="all, delete-orphan")
     interactions = db.relationship('Interaction', back_populates='contact', cascade="all, delete-orphan")
 
+    phone_numbers = db.relationship('ContactPhoneNumber', back_populates='contact', cascade="all, delete-orphan")
+    email_addresses = db.relationship('ContactEmailAddresses', back_populates='contact', cascade="all, delete-orphan")
+    physical_addresses = db.relationship('ContactPhysicalAddresses', back_populates='contact', cascade="all, delete-orphan")
+
 class EventType(db.Model):
     __tablename__ = 'event_types'
     id = db.Column(db.Integer, primary_key=True)
@@ -59,3 +63,33 @@ class Interaction(db.Model):
     
     contact = db.relationship('Contact', back_populates='interactions')
     creator = db.relationship('User')
+
+class ContactPhoneNumber(db.Model):
+    __tablename__ = 'contact_phone_numbers'
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    phone_number = db.Column(db.String(20), nullable=False)
+    label = db.Column(db.String(50), default='Mobile')
+    is_primary = db.Column(db.Boolean, default=False, nullable=False)
+
+    contact_id = db.Column(UUID(as_uuid=True), db.ForeignKey('contacts.id'), nullable=False)
+    contact = db.relationship('Contact', back_populates='phone_numbers')
+
+class ContactEmailAddresses(db.Model):
+    __tablename__ = 'contact_phone_numbers'
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    phone_number = db.Column(db.String(20), nullable=False)
+    label = db.Column(db.String(50), default='Mobile')
+    is_primary = db.Column(db.Boolean, default=False, nullable=False)
+
+    contact_id = db.Column(UUID(as_uuid=True), db.ForeignKey('contacts.id'), nullable=False)
+    contact = db.relationship('Contact', back_populates='phone_numbers')
+
+class ContactPhysicalAddresses(db.Model):
+    __tablename__ = 'contact_phone_numbers'
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    phone_number = db.Column(db.String(20), nullable=False)
+    label = db.Column(db.String(50), default='Mobile')
+    is_primary = db.Column(db.Boolean, default=False, nullable=False)
+
+    contact_id = db.Column(UUID(as_uuid=True), db.ForeignKey('contacts.id'), nullable=False)
+    contact = db.relationship('Contact', back_populates='phone_numbers')
